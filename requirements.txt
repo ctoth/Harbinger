@@ -1,0 +1,8 @@
+newspaper3k
+
+newsapi-python
+
+sanic
+rq
+
+redis-collections
