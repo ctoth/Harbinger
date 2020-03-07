@@ -1,3 +1,5 @@
+from logging import getLogger
+logger = getLogger("Newsloader")
 from newsapi import NewsApiClient
 import newspaper
 import rq
@@ -6,7 +8,7 @@ import redis_collections
 
 REDIS_CONNECTION = Redis(host="redis")
 
-articles = redis_collections.List(key="articles")
+articles = redis_collections.List(key="articles", redis=REDIS_CONNECTION)
 
 job_queue = rq.Queue(connection=REDIS_CONNECTION)
 
@@ -29,6 +31,7 @@ def process_urls(urls):
 
 
 def retrieve_articles():
+    logger.info("Retrieving most recent news articles...")
     download_job = job_queue.enqueue(retrieve_article_urls)
     job_queue.enqueue(process_urls, depends_on=download_job)
 
@@ -36,6 +39,7 @@ def process_article(article_url):
     article = newspaper.Article(article_url, config=NEWSPAPER_CONFIG)
     article.download()
     article.parse()
+    logger.info("Parsed article ", article.title)
     articles.push({
         'title': article.title,
         'authors': article.authors,
