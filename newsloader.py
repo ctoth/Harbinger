@@ -4,7 +4,7 @@ import rq
 from redis import Redis
 import redis_collections
 
-REDIS_CONNECTION = Redis()
+REDIS_CONNECTION = Redis(host="redis")
 
 articles = redis_collections.List(key="articles")
 
