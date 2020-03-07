@@ -1,6 +1,6 @@
 version: '3.6'
 services:
-  harbinger:
+  app:
     build:
       context: ./
     depends_on:
@@ -10,7 +10,7 @@ services:
     ports:
       - "5000:5000"
   redis:
-    image: redis:3.2-alpine
+    image: redis:alpine
     volumes:
       - redis_data:/data
 volumes:
