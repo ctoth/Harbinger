@@ -32,7 +32,7 @@ def retrieve_articles(sources="google-news"):
 
 
 def process_article(article_url):
-    article = newspaper.Article(article_url, config=NEWSPAPER_CONFIG)
+    article = newspaper.Article(article_url, keep_article_html=True, config=NEWSPAPER_CONFIG)
     article.download()
     article.parse()
     logger.info("Parsed article ", article.title)
@@ -49,10 +49,12 @@ def article_to_dict(article):
         'text': article.text,
         'url': article.url,
         'source_url': article.source_url,
+        'article_html': article.article_html,
+        'keywords': article.keywords,
     }
 
 def process_newspaper(url):
-    source = newspaper.build(url, config=NEWSPAPER_CONFIG)
+    source = newspaper.build(url, config=NEWSPAPER_CONFIG, keep_article_html=True)
     source.download_articles()
     for article in source.articles:
         article.parse()
