@@ -76,5 +76,5 @@ def import_article(article_dict):
 
 
 def create_schema():
-    db.create_tables([Author, Tag, Source,  Article,
+    db.create_tables([Author, Keyword, Tag, Source,  Article,
                       ArticleAuthors, ArticleKeywords, ArticleTags, ])

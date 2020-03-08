@@ -35,6 +35,7 @@ def process_article(article_url):
     article = newspaper.Article(article_url, keep_article_html=True, config=NEWSPAPER_CONFIG)
     article.download()
     article.parse()
+    article.nlp()
     logger.info("Parsed article ", article.title)
     return article_to_dict(article)
 
@@ -47,15 +48,16 @@ def article_to_dict(article):
         'tags': article.tags,
         'summary': article.summary,
         'text': article.text,
-        'url': article.url,
-        'source_url': article.source_url,
+        'url': article.canonical_link,
         'article_html': article.article_html,
+        'source_url': article.source_url,
         'keywords': article.keywords,
     }
 
 def process_newspaper(url):
-    source = newspaper.build(url, config=NEWSPAPER_CONFIG, keep_article_html=True)
+    source = newspaper.build(url, config=NEWSPAPER_CONFIG, keep_article_html=True, memoize_articles=False)
     source.download_articles()
     for article in source.articles:
         article.parse()
+        article.nlp()
         yield article_to_dict(article)
