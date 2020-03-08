@@ -1,6 +1,10 @@
 import models, newsloader
 models.create_schema()
 
-articles = newsloader.retrieve_articles()
-article_dict = next(articles)
-article = models.import_article(article_dict)
+articles = newsloader.process_newspaper('https://nytimes.com')
+for article_dict in articles:
+    article = models.Article.get_or_none(url=article_dict['url'])
+    if article is None:
+        article = models.import_article(article_dict)
+        print(article.title)
+    
