@@ -3,6 +3,7 @@ newspaper3k
 newsapi-python
 
 sanic
-rq
+celery
 
-redis-collections
+
+peewee
